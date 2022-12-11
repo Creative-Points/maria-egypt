@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2022 at 08:04 AM
+-- Generation Time: Dec 12, 2022 at 12:07 AM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 8.1.6
 
@@ -94,10 +94,37 @@ CREATE TABLE `images` (
 --
 
 INSERT INTO `images` (`place_id`, `image`, `flag`, `created_at`, `updated_at`) VALUES
-(6, '8yJFt9BgQM2q.jpg', 1, NULL, NULL),
-(6, 'rb8rA9qVMigi.jpg', 0, NULL, NULL),
-(6, 'Bff7qwVyXKvM.jpg', 0, NULL, NULL),
-(6, '2o23Zmv7bU78.jpg', 0, NULL, NULL);
+(6, 'jZwWBe0S5RzR.jpg', 1, NULL, NULL),
+(6, 'kILkLsNi3Jqw.jpg', 0, NULL, NULL),
+(6, 'UOhovAFcDjnf.jpg', 0, NULL, NULL),
+(6, 'S8zgYLG33cnU.jpg', 0, NULL, NULL),
+(6, 'cQqyXhp7z3Dp.jpg', 0, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `itinerary`
+--
+
+CREATE TABLE `itinerary` (
+  `id` bigint(20) NOT NULL,
+  `day` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `lat` varchar(255) DEFAULT NULL,
+  `lng` varchar(255) DEFAULT NULL,
+  `link` varchar(255) DEFAULT NULL,
+  `place_id` bigint(20) NOT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `itinerary`
+--
+
+INSERT INTO `itinerary` (`id`, `day`, `title`, `description`, `lat`, `lng`, `link`, `place_id`, `updated_at`) VALUES
+(1, 1, 'Title day 1', 'description <strong>Strong text</strong>', '12.903', '23.423', NULL, 6, '2022-12-11 13:59:45'),
+(2, 2, 'Title 2', 'desc <strong>STRONG</strong>.<br>\r\n<br>\r\nLang', '13.242', '23.423', NULL, 6, '2022-12-11 13:58:19');
 
 -- --------------------------------------------------------
 
@@ -261,7 +288,7 @@ CREATE TABLE `places` (
 --
 
 INSERT INTO `places` (`id`, `name`, `description`, `duration`, `price`, `run`, `country`, `type`, `included`, `excluded`, `slug`, `status`, `created_at`, `updated_at`) VALUES
-(6, 'Trip to Egypt: Pyramids & Nile by Air', 'Combine the rich heritage of Cairo with a magical 5-day Nile cruise on this Egypt vacation package—a must for any lover of history. Experience the best Egypt tour, visiting all of Egypt’s top highlights attractions scattered across the desert and range from famous pyramids to forgotten temples only in 8 days. You’ll begin your tour in Cairo. This is where you will visit the Great Pyramids of Giza and the Egyptian Museum. Then, fly to Luxor to embark on your cruise on the Nile where you will explore captivating attractions and natural scenery between Luxor and Aswan. With this tour, enjoy a luxurious five-star cruise, your choice of traditional hotel or boutique hotel, mesmeric history, and a seductive charm that will have you leaving Egypt in astonishment.', '10 Days|9 Nights', 1200, 'Saturday, Sunday & Thursday', '2 Countries|12 Cities', 'Private Tour', 'Meet and greet service by our representatives upon your airport arrival|Assistance with guest relations during your stay|All transfers via private air-conditioned vehicle', 'International Airfare|Entry visa to Egypt', 'trip-to-egypt-pyramids-nile-by-air', 1, NULL, NULL);
+(6, 'Trip to Egypt: Pyramids & Nile by Air', 'Combine the rich heritage of Cairo with a magical 5-day Nile cruise on this Egypt vacation package—a must for any lover of history. Experience the best Egypt tour, visiting all of Egypt’s top highlights attractions scattered across the desert and range from famous pyramids to forgotten temples only in 8 days. You’ll begin your tour in Cairo. This is where you will visit the Great Pyramids of Giza and the Egyptian Museum. Then, fly to Luxor to embark on your cruise on the Nile where you will explore captivating attractions and natural scenery between Luxor and Aswan. With this tour, enjoy a luxurious five-star cruise, your choice of traditional hotel or boutique hotel, mesmeric history, and a seductive charm that will have you leaving Egypt in astonishment.', '10 Days|9 Nights', 1200, 'Saturday, Sunday & Thursday', '2 Countries|12 Cities', 'Private Tour', 'Meet and greet service by our representatives upon your airport arrival|Assistance with guest relations during your stay|All transfers via private air-conditioned vehicle', 'International Airfare|Entry visa to Egypt', 'trip-to-egypt-pyramids-nile-by-air', 1, NULL, '2022-12-11 10:06:00');
 
 -- --------------------------------------------------------
 
@@ -349,6 +376,13 @@ ALTER TABLE `failed_jobs`
 -- Indexes for table `images`
 --
 ALTER TABLE `images`
+  ADD KEY `place_id` (`place_id`);
+
+--
+-- Indexes for table `itinerary`
+--
+ALTER TABLE `itinerary`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `place_id` (`place_id`);
 
 --
@@ -456,6 +490,12 @@ ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `itinerary`
+--
+ALTER TABLE `itinerary`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -512,6 +552,12 @@ ALTER TABLE `days`
 --
 ALTER TABLE `images`
   ADD CONSTRAINT `images_ibfk_1` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `itinerary`
+--
+ALTER TABLE `itinerary`
+  ADD CONSTRAINT `itinerary_ibfk_1` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `model_has_permissions`
