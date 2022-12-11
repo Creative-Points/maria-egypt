@@ -61,7 +61,6 @@
                                         <input name="submit" id="" class="btn btn-primary" type="submit"
                                             value="Add">
                                     </div>
-
                                 </div>
                                 {{-- end submit --}}
                             </div>

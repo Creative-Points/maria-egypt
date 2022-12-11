@@ -47,7 +47,7 @@
                                             <img src="{{ asset('uploads/place/') . '/' . $place->image }}" width="50" height="50">
                                         </div>
                                     </td>
-                                    <td>{{ $place->name }}</td>
+                                    <td><a href="{{ route('admin.place.view', $place->id) }}" class="nav-link">{{ $place->name }}</a></td>
                                     <td>{{ $place->duration }}</td>
                                     <td>{{ $place->price }}</td>
                                     <td>{{ $place->run }}</td>
@@ -63,6 +63,7 @@
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <a href="{{ route('admin.place.view', $place->id) }}" class="dropdown-item">View</a>
                                                 <a href="{{ route('admin.place.edit', $place->id) }}" class="dropdown-item">Edit</a>
+                                                <a href="{{ route('admin.place.addItin', $place->slug) }}" class="dropdown-item">Itinerary</a>
                                                 @if ($place->status == 1)
                                                     <a href="{{ route('admin.place.unactive', $place->id) }}" class="dropdown-item">Unctive</a>
                                                 @else

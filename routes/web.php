@@ -45,7 +45,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('dashboard')->name('admin.')->
         Route::get('/{city:id}/unactive', 'unactive')->name('unactive');
         Route::delete('/{city:id}/delete', 'destroy')->name('delete');
     });
-    
+
     Route::controller(PlaceController::class)->name('place.')->prefix('places')->group(function(){
         Route::get('/', 'index')->name('manage');
         Route::get('/add-new', 'create')->name('create');
@@ -56,6 +56,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('dashboard')->name('admin.')->
         Route::get('/{place:id}/active', 'active')->name('active');
         Route::get('/{place:id}/unactive', 'unactive')->name('unactive');
         Route::delete('/{place:id}/delete', 'destroy')->name('delete');
+
+        // itinerary
+        Route::get('/{place:slug}/add-itinerary', 'addItin')->name('addItin');
+        Route::post('/{place:slug}/add-itinerary', 'storeItin')->name('storeItin');
+        Route::get('/{place:slug}/itinerary/{itinerary}/edit', 'editItin')->name('editItin');
+        Route::put('/{place:slug}/itinerary/{itin}/update', 'updateItin')->name('updateItin');
+        Route::delete('itin//{itin}/delete', 'deleteItin')->name('deleteItin');
     });
 });
 

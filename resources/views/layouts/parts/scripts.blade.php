@@ -1,5 +1,5 @@
-<script src="assets/js/all-jquery-combined-new.v1640264538.js"></script>
-<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/all-jquery-combined-new.v1640264538.js"></script>
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
     jQuery(document).ready(function() {
         jQuery.material.init();
@@ -24,7 +24,7 @@
 <!--  -->
 
 <!--  -->
-<script src="assets/js/swiper-bundle.min.js"></script>
+<script src="/assets/js/swiper-bundle.min.js"></script>
 <script>
     var swiper = new Swiper(".mySwiper", {
         pagination: {
