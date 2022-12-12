@@ -18,29 +18,8 @@
             <nav class="main_nav">
                 <ul>
                     <li><a href="/">Home</a></li>
+                    <li><a href="{{ route('front.tours') }}">Tours</a></li>
                     <li><a href="about.php">About Us</a></li>
-                    <li><a href="tour-list.php">Tours</a>
-                        <!-- <i class="fa fa-caret-down"></i>
-            <ul>
-              <li><a href="#">Web Designing</a></li>
-              <li><a href="#">Web Development</a></li>
-              <li><a href="#">Digital Marketing</a>
-                <i class="fa fa-caret-down"></i>
-                <ul>
-                  <li><a href="#">Service 11</a></li>
-                  <li><a href="#">Service 11</a></li>
-                  <li><a href="#">Service 11</a>
-                    <i class="fa fa-caret-down"></i>
-                    <ul>
-                      <li><a href="#">Service 111</a></li>
-                      <li><a href="#">Service 111</a></li>
-                      <li><a href="#">Service 111</a></li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-            </ul> -->
-                    </li>
                     <li><a href="Privacy-Policy.php">Privacy Policy</a></li>
                     <!-- <li><a href="#">Blog</a></li> -->
                     <li><a href="contact-us.php">Contact Us</a></li>

@@ -2264,4 +2264,121 @@
             </div>
         </div>
     </div>
+    
+    <script
+        src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=initialize&key=AIzaSyCN2jLP2y5WTC637u0nVZgJFW1zI1dyG74">
+    </script>
+    <script>
+        function initialize() {
+
+            var markers = new Array();
+
+            var mapOptions = {
+                zoom: 9,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                center: new google.maps.LatLng({{ $days[0]->lat }}, {{ $days[0]->lng }})
+            };
+
+            var locations = [
+                @foreach ($days as $day)
+                    [new google.maps.LatLng({{ $day->lat }}, $day->lng), "Day {{ $day->day }}: Arrival in Cairo", "Day 1: Cairo Airport"],
+                @endforeach
+                // [new google.maps.LatLng(30.1128268, 31.3976017), "Day 1: Arrival in Cairo", "Day 1: Cairo Airport"],
+                // [new google.maps.LatLng(29.9772962, 31.1303068), "Day 2: Pyramids and Cairo Sightseeing",
+                //     "Day 2: Pyramids"
+                // ],
+                // [new google.maps.LatLng(25.718508, 32.6496197), "Day 3: Fly to Luxor - East Bank Sightseeing",
+                //     "Day 3: Luxor East Bank"
+                // ],
+                // [new google.maps.LatLng(25.74258, 32.5972163), "Day 4: West Bank Sightseeing",
+                // "Day 4: Luxor West Bank"],
+                // [new google.maps.LatLng(24.9751905, 32.8696805), "Day 5: Edfu and Kom Ombo", "Day 5: Edfu & Kom Ombo"],
+                // [new google.maps.LatLng(24.0923728, 32.8825965), "Day 6: Aswan Sightseeing", "Day 6: Aswan"],
+                // [new google.maps.LatLng(22.3372319, 31.6236103), "Day 7: Fly to Cairo - Optional Tour to Abu Simbel",
+                //     "Day 7: Abu Simbel"
+                // ],
+                // [new google.maps.LatLng(30.1128481, 31.3975822), "Day 8: Cairo - Fly Back Home",
+                // "Day 8: Cairo Airport"],
+            ];
+
+            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+            var infowindow = new google.maps.InfoWindow();
+
+            for (var i = 0; i < locations.length; i++) {
+
+                var marker = new google.maps.Marker({
+                    position: locations[i][0],
+                    map: map,
+                    title: locations[i][1],
+                });
+
+                // Register a click event listener on the marker to display the corresponding infowindow content
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+
+                    return function() {
+                        infowindow.setContent(locations[i][2]);
+                        infowindow.open(map, marker);
+                    }
+
+                })(marker, i));
+
+                // Add marker to markers array
+                markers.push(marker);
+            }
+
+            // Trigger a click event on each marker when the corresponding marker link is clicked
+            $('.program_itinerary_box_title').on('click', function() {
+                google.maps.event.trigger(markers[$(this).data('link')], 'click');
+            });
+
+            const flightPlanCoordinates = [
+                @foreach ($days as $tour)
+                    {
+                        lat: {{ $tour->lat }},
+                        lng: {{ $tour->lng }}
+                    },
+                @endforeach
+                
+                // {
+                //     lat: 29.9772962,
+                //     lng: 31.1303068
+                // },
+                // {
+                //     lat: 25.718508,
+                //     lng: 32.6496197
+                // },
+                // {
+                //     lat: 25.74258,
+                //     lng: 32.5972163
+                // },
+                // {
+                //     lat: 24.9751905,
+                //     lng: 32.8696805
+                // },
+                // {
+                //     lat: 24.0923728,
+                //     lng: 32.8825965
+                // },
+                // {
+                //     lat: 22.3372319,
+                //     lng: 31.6236103
+                // },
+                // {
+                //     lat: 30.1128481,
+                //     lng: 31.3975822
+                // },
+            ];
+            const flightPath = new google.maps.Polyline({
+                path: flightPlanCoordinates,
+                geodesic: true,
+                strokeColor: "#707070",
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+            });
+            flightPath.setMap(map);
+        }
+
+        initialize();
+    </script>
 @endsection

@@ -23,6 +23,7 @@ Route::get('/tour', function(){
 
 Route::controller(FrontController::class)->name('front.')->group(function(){
     Route::get('/', 'index')->name('index');
+    Route::get('/tours', 'tours')->name('tours');
     Route::get('/tours/{place:slug}', 'tour')->name('tour');
 });
 

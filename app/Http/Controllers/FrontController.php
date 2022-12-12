@@ -31,4 +31,19 @@ class FrontController extends Controller
         // return var_dump($images);
         return view('tour', compact('place', 'images', 'days'));
     }
+
+    /**
+    * Tour
+    * @return \Illuminate\Http\Response
+    **/
+    public function tours()
+    {
+        $tours = DB::table('places')
+                    ->join('images', 'images.place_id', '=', 'places.id')
+                    ->select('places.*', 'images.image')
+                    ->where('images.flag', '=', 1)
+                    ->where('places.status', '=', 1)
+                    ->get();
+        return view('tours', compact('tours'));
+    }
 }
