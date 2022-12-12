@@ -1,10 +1,10 @@
-<link rel="stylesheet" href="/css/all.css">
+<link rel="stylesheet" href="{{ asset('css/all.css') }}">
 
 <header id="header">
     <!--header-start-->
     <div class="containerr">
         <div class="header_left">
-            <a class="logo" href="#"><img src="/assets/images/logo.png"
+            <a class="logo" href="/"><img src="{{ asset('assets/images/logo.png') }}"
                     style="
        width: 100px;
     /* height: 75px; */
