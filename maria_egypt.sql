@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 12, 2022 at 12:07 AM
+-- Generation Time: Dec 12, 2022 at 09:08 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 8.1.6
 
@@ -123,8 +123,8 @@ CREATE TABLE `itinerary` (
 --
 
 INSERT INTO `itinerary` (`id`, `day`, `title`, `description`, `lat`, `lng`, `link`, `place_id`, `updated_at`) VALUES
-(1, 1, 'Title day 1', 'description <strong>Strong text</strong>', '12.903', '23.423', NULL, 6, '2022-12-11 13:59:45'),
-(2, 2, 'Title 2', 'desc <strong>STRONG</strong>.<br>\r\n<br>\r\nLang', '13.242', '23.423', NULL, 6, '2022-12-11 13:58:19');
+(1, 1, 'Arrival in Cairo', 'Welcome to the mystical lands of Egypt, where the Pharaohs ruled for thousands of years. Upon your arrival at Cairo International Airport, your tour manager will meet and assist you and ease the process by helping you to get the entry visa. You will then be escorted through the bustling streets of Cairo in an exclusive air-conditioned vehicle. Once you reach your chosen hotel according to your accommodation plan whether it will be overlooking the Great Pyramids of Giza like Hilton Pyramids Golf Hotel or over looking the Nile, like the luxurious Sheraton Cairo Hotel & Casino, your tour manager will assist you with your check-in and double-check your itinerary with you to establish and confirm all the pick-up times for all your activities during your trip.\r\n\r\n<strong>Overnight in Cairo.\r\n<br><br>\r\nWelcome drink included.</strong>', '30.1128268', '31.3976017', NULL, 6, '2022-12-12 16:21:17'),
+(2, 2, 'Pyramids and Cairo Sightseeing', 'After enjoying a delicious wholesome breakfast at your hotel, your personal guide will take you to the Giza Plateau to start your journey by marveling at one of the Seven Wonders of the World, the Great Pyramids of Giza. Walk or take a camel over to the iconic Sphinx and Valley Temple. After your pyramids visit, you’ll go for lunch at an authentic Egyptian restaurant and then head over to the Egyptian Museum, in the heart of historic Downtown Cairo, overlooking the renowned Tahrir Square. After relishing over the magnificent ancient Egyptian artifacts and treasures, you will be driven through Old Cairo to arrive at the historic Islamic Cairo area where you will explore the vibrant, meandering, treasure-filled alleys of Khan El Khalili, Cairo’s oldest bazaar, if there is time.\r\n<br>\r\n<br>\r\n<strong>Overnight in Cairo.</strong><br>\r\n<strong>Meals:</strong> Breakfast, Lunch.<br>\r\n<strong>Visits:</strong> Great Pyramids of Giza, Sphinx, Valley Temple, Egyptian Museum, Khan El Khalili.', '29.9772962', '31.1303068', NULL, 6, '2022-12-12 16:24:17');
 
 -- --------------------------------------------------------
 
@@ -288,7 +288,7 @@ CREATE TABLE `places` (
 --
 
 INSERT INTO `places` (`id`, `name`, `description`, `duration`, `price`, `run`, `country`, `type`, `included`, `excluded`, `slug`, `status`, `created_at`, `updated_at`) VALUES
-(6, 'Trip to Egypt: Pyramids & Nile by Air', 'Combine the rich heritage of Cairo with a magical 5-day Nile cruise on this Egypt vacation package—a must for any lover of history. Experience the best Egypt tour, visiting all of Egypt’s top highlights attractions scattered across the desert and range from famous pyramids to forgotten temples only in 8 days. You’ll begin your tour in Cairo. This is where you will visit the Great Pyramids of Giza and the Egyptian Museum. Then, fly to Luxor to embark on your cruise on the Nile where you will explore captivating attractions and natural scenery between Luxor and Aswan. With this tour, enjoy a luxurious five-star cruise, your choice of traditional hotel or boutique hotel, mesmeric history, and a seductive charm that will have you leaving Egypt in astonishment.', '10 Days|9 Nights', 1200, 'Saturday, Sunday & Thursday', '2 Countries|12 Cities', 'Private Tour', 'Meet and greet service by our representatives upon your airport arrival|Assistance with guest relations during your stay|All transfers via private air-conditioned vehicle', 'International Airfare|Entry visa to Egypt', 'trip-to-egypt-pyramids-nile-by-air', 1, NULL, '2022-12-11 10:06:00');
+(6, 'Trip to Egypt: Pyramids & Nile by Air', 'Combine the rich heritage of Cairo with a magical 5-day Nile cruise on this Egypt vacation package—a must for any lover of history. Experience the best Egypt tour, visiting all of Egypt’s top highlights attractions scattered across the desert and range from famous pyramids to forgotten temples only in 8 days. You’ll begin your tour in Cairo. This is where you will visit the Great Pyramids of Giza and the Egyptian Museum. Then, fly to Luxor to embark on your cruise on the Nile where you will explore captivating attractions and natural scenery between Luxor and Aswan. With this tour, enjoy a luxurious five-star cruise, your choice of traditional hotel or boutique hotel, mesmeric history, and a seductive charm that will have you leaving Egypt in astonishment.', '10 Days|9 Nights', 1200, 'Saturday, Sunday & Thursday', '2 Countries|12 Cities', 'Private Tour', 'Meet and greet service by our representatives upon your airport arrival|Assistance with guest relations during your stay|All transfers via private air-conditioned vehicle', 'International Airfare|Entry visa to Egypt', 'trip-to-egypt-pyramids-nile-by-air', 1, NULL, '2022-12-12 16:07:29');
 
 -- --------------------------------------------------------
 
