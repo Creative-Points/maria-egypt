@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Place;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class FrontController extends Controller
 {
@@ -45,5 +48,60 @@ class FrontController extends Controller
                     ->where('places.status', '=', 1)
                     ->get();
         return view('tours', compact('tours'));
+    }
+
+    public function about()
+    {
+        return view('about');
+    }
+
+    public function privacy()
+    {
+        return view('privacy');
+    }
+
+    public function contact()
+    {
+        return view('contact');
+    }
+
+    public function order(Request $request, Place $place)
+    {
+        $valid = Validator::make($request->all(), [
+            'title' => 'required|string|min:2|max:3',
+            'name' => 'required|string',
+            'password' => 'required|string|min:8',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|numeric|unique:users,phone',
+            'phone_ext' => 'required|numeric',
+            'nationality' => 'required|string',
+            'arrival' => 'required|string',
+            'departure' => 'required|string',
+            'adults' => 'numeric',
+            'children' => 'numeric',
+            'infants' => 'numeric',
+            'comment' => 'string|nullable'
+        ]);
+        if($valid->fails())
+        {
+            return back()->withInput()->withErrors($valid);
+        }else{
+            $id = User::create([
+                'title' => $request->title,
+                'name' => $request->name,
+                'password' => Hash::make($request->password),
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'phone_ext' => $request->phone_ext,
+                'nation' => $request->nationality,
+                'created_at' => now(),
+            ])->assignRole('user');
+            $orderid = DB::table('orders')->insertGetId([
+                'user_id' => $id,
+                'place_id' => $place->id,
+                'created_at' => now(),
+            ]);
+            return back()->with('status', 'Successfully.');
+        }
     }
 }

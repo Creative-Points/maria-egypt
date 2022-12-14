@@ -12,6 +12,7 @@
 
 " alt="logo"></a>
         </div>
+        <h3 style="color:#fff;">{{ env('APP_NAME') }}</h3>
         <div class="header_right">
             <label for="menuTrigger" class="nav_ico"><i class="fa fa-bars"></i></label>
             <input id="menuTrigger" type="checkbox" name="">
@@ -19,20 +20,49 @@
                 <ul>
                     <li><a href="/">Home</a></li>
                     <li><a href="{{ route('front.tours') }}">Tours</a></li>
-                    <li><a href="about.php">About Us</a></li>
-                    <li><a href="Privacy-Policy.php">Privacy Policy</a></li>
+                    <li><a href="{{ route('front.about') }}">About Us</a></li>
+                    <li><a href="{{ route('front.privacy') }}">Privacy Policy</a></li>
                     <!-- <li><a href="#">Blog</a></li> -->
-                    <li><a href="contact-us.php">Contact Us</a></li>
+                    <li><a href="{{ route('front.contact') }}">Contact Us</a></li>
+                    @guest
+                        <li> <a class="menu_link profile d-flex align-items-center" href="#" data-bs-toggle="modal"
+                                data-bs-target="#loginmodal">
+                                <svg width="24" height="24" aria-hidden="true" role="img" viewBox="0 0 24 24"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M8.5 7.25a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM12.25 2a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5zm0 12c-2.411 0-4.746.788-6.487 2.221C4.018 17.658 3 19.642 3 21.75a.75.75 0 001.5 0c0-1.605.773-3.182 2.216-4.37 1.448-1.193 3.436-1.88 5.534-1.88s4.087.687 5.534 1.88C19.227 18.567 20 20.144 20 21.75a.75.75 0 001.5 0c0-2.108-1.018-4.092-2.763-5.529C16.997 14.788 14.661 14 12.25 14z"
+                                        fill="#2A2D32"></path>
+                                </svg>
+                                Login / Sign Up</a></li>
+                    @else
+                        @role('user')
+                            <li>
+                                <a href="{{ route('user.home') }}">Profile</a>
+                            </li>
+                            <li>
+                                    <a href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
 
-                    <li> <a class="menu_link profile d-flex align-items-center" href="#" data-bs-toggle="modal"
-                            data-bs-target="#loginmodal">
-                            <svg width="24" height="24" aria-hidden="true" role="img" viewBox="0 0 24 24"
-                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M8.5 7.25a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM12.25 2a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5zm0 12c-2.411 0-4.746.788-6.487 2.221C4.018 17.658 3 19.642 3 21.75a.75.75 0 001.5 0c0-1.605.773-3.182 2.216-4.37 1.448-1.193 3.436-1.88 5.534-1.88s4.087.687 5.534 1.88C19.227 18.567 20 20.144 20 21.75a.75.75 0 001.5 0c0-2.108-1.018-4.092-2.763-5.529C16.997 14.788 14.661 14 12.25 14z"
-                                    fill="#2A2D32"></path>
-                            </svg>
-                            Login / Sign Up</a></li>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                            </li>
+                        @else
+                            <li> <a class="menu_link profile d-flex align-items-center" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#loginmodal">
+                                    <svg width="24" height="24" aria-hidden="true" role="img" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M8.5 7.25a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM12.25 2a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5zm0 12c-2.411 0-4.746.788-6.487 2.221C4.018 17.658 3 19.642 3 21.75a.75.75 0 001.5 0c0-1.605.773-3.182 2.216-4.37 1.448-1.193 3.436-1.88 5.534-1.88s4.087.687 5.534 1.88C19.227 18.567 20 20.144 20 21.75a.75.75 0 001.5 0c0-2.108-1.018-4.092-2.763-5.529C16.997 14.788 14.661 14 12.25 14z"
+                                            fill="#2A2D32"></path>
+                                    </svg>
+                                    Login / Sign Up</a></li>
+                        @endrole
+                    @endguest
+
                 </ul>
             </nav>
         </div>

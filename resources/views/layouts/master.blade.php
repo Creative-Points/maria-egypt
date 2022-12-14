@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
-    <link rel="canonical" href="https://www.memphistours.com" />
-    <link rel="amphtml" href="https://www.memphistours.com/?page=amp">
+    <link rel="canonical" href="https://www.mariaegypt.com" />
+    <link rel="amphtml" href="https://www.mariaegypt.com/?page=amp">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta property="fb:pages" content="139869103039316" />
     <meta charset="utf-8" />
@@ -15,7 +15,7 @@
 <body>
     @include('layouts.parts.header')
 
-   
+
 
 
 
@@ -36,7 +36,7 @@
 
 
     <div class="main-container">
-        
+
         @yield('content')
     </div>
 

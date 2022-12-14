@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\PlaceController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,18 +18,23 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/tour', function(){
-    return view('tour');
-});
+// Route::get('/tour', function(){
+//     return view('tour');
+// });
 
 Route::controller(FrontController::class)->name('front.')->group(function(){
     Route::get('/', 'index')->name('index');
     Route::get('/tours', 'tours')->name('tours');
+    Route::post('/tours-orders/{place:slug}', 'order')->name('order');
     Route::get('/tours/{place:slug}', 'tour')->name('tour');
+    Route::get('/about', 'about')->name('about');
+    Route::get('/Privacy-Policy', 'privacy')->name('privacy');
+    Route::get('/contact-us', 'contact')->name('contact');
 });
 
-Route::middleware(['auth', 'role:user'])->name('user.')->group(function(){
-    //
+Route::middleware(['auth', 'role:user'])->controller(UserController::class)->name('user.')->group(function(){
+    Route::get('/home', 'profile')->name('home');
+    Route::post('/tours-order/{place:slug}', 'order')->name('order');
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('dashboard')->name('admin.')->group(function(){
@@ -69,4 +75,4 @@ Route::middleware(['auth', 'role:admin'])->prefix('dashboard')->name('admin.')->
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 12, 2022 at 09:08 PM
+-- Generation Time: Dec 15, 2022 at 12:52 AM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 8.1.6
 
@@ -179,7 +179,8 @@ CREATE TABLE `model_has_roles` (
 
 INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (1, 'App\\Models\\User', 2),
-(2, 'App\\Models\\User', 1);
+(2, 'App\\Models\\User', 1),
+(2, 'App\\Models\\User', 3);
 
 -- --------------------------------------------------------
 
@@ -190,9 +191,24 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 CREATE TABLE `orders` (
   `id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
+  `place_id` bigint(20) NOT NULL,
+  `arrival` varchar(255) NOT NULL,
+  `departure` varchar(255) NOT NULL,
+  `adults` int(11) DEFAULT NULL,
+  `children` int(11) DEFAULT NULL,
+  `infants` int(11) DEFAULT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `place_id`, `arrival`, `departure`, `adults`, `children`, `infants`, `comment`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 6, '20/12/2022', '27/12/2022', 2, 0, 0, NULL, 0, '2022-12-14 21:44:43', NULL);
 
 -- --------------------------------------------------------
 
@@ -331,7 +347,11 @@ CREATE TABLE `role_has_permissions` (
 
 CREATE TABLE `users` (
   `id` bigint(20) NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nation` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone_ext` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -344,9 +364,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'New User', 'user@gmail.com', '2022-12-04 13:04:07', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, '2022-12-04 13:04:07', '2022-12-04 13:04:07'),
-(2, 'Nabil Hamada', 'admin@gmail.com', '2022-12-04 13:04:07', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, '2022-12-04 13:04:07', '2022-12-04 13:04:07');
+INSERT INTO `users` (`id`, `title`, `name`, `nation`, `phone`, `phone_ext`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Mr', 'New User', 'Egypt', '1118172639', '20', 'user@gmail.com', '2022-12-04 13:04:07', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, '2022-12-04 13:04:07', '2022-12-04 13:04:07'),
+(2, '', 'Nabil Hamada', NULL, NULL, '', 'admin@gmail.com', '2022-12-04 13:04:07', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, '2022-12-04 13:04:07', '2022-12-04 13:04:07'),
+(3, 'Mr', 'Nabil Hamada', 'Azerbaijani', '01148599674', '994', 'Nabilhamada421@gmail.com', NULL, '$2y$10$1L8KxKNzzLD8uJ7VNL49n.hn.5XNS7FbfByOJC3zR12hBq411mZC2', NULL, '2022-12-14 21:50:39', '2022-12-14 21:50:39');
 
 --
 -- Indexes for dumped tables
@@ -410,7 +431,8 @@ ALTER TABLE `model_has_roles`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `orders_ibfk_1` (`user_id`);
+  ADD KEY `orders_ibfk_1` (`user_id`),
+  ADD KEY `place_id` (`place_id`);
 
 --
 -- Indexes for table `order_details`
@@ -465,7 +487,8 @@ ALTER TABLE `role_has_permissions`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`);
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD UNIQUE KEY `phone` (`phone`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -505,7 +528,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -535,7 +558,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -575,7 +598,8 @@ ALTER TABLE `model_has_roles`
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `order_details`

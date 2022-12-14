@@ -37,6 +37,16 @@
         </div>
     </div>
     <div class="container">
+        @if (session('status'))
+            <div class="alert alert-success">{{ session('status') }}</div>
+        @endif
+        @if ($errors->any())
+            <ul class="alert alert-danger">
+                @foreach ($errors->all() as $err)
+                    <li>{{ $err }}</li>
+                @endforeach
+            </ul>
+        @endif
         <div class="row">
             <div class="col-md-9">
                 <div class="row">
@@ -273,12 +283,12 @@
                             <div class="col-9 slickMainSlider">
                                 @foreach ($images as $img)
                                     <div class="sliderMainPhoto"
-                                        style="background-image: url('/uploads/place/{{ $img->image }}')"
-                                        title="Trip to Egypt: Pyramids & Nile by Air">
+                                        style="background-image: url('{{ asset('uploads/place/'.$img->image) }}')"
+                                        title="{{ $place->name }}">
                                     </div>
                                 @endforeach
 
-                                {{-- <div class="sliderMainPhoto" style="background-image: url('https://images.memphistours.com/large/1270215224_Trip to Egypt Pyramids & Nile by Train.jpg')" title="Trip to Egypt: Pyramids & Nile by Air">
+                                {{-- <div class="sliderMainPhoto" style="background-image: url('https://images.memphistours.com/large/1270215224_Trip to Egypt Pyramids & Nile by Train.jpg')" title="{{ $place->name }}">
                                     </div>
                                     <div class="sliderMainPhoto" style="background-image: url('https://images.memphistours.com/large/1494661409_Trip to Egypt Pyramids & Nile by Air.jpg')" title="{{ $place->name }}">
                                     </div> --}}
@@ -289,25 +299,25 @@
                                         <div class="sliderNavPhotoContain" data-bs-toggle="modal"
                                             data-bs-target="#galleryModal">
                                             <div class="sliderNavPhoto"
-                                                style="background-image: url('/uploads/place/{{ $images[$i]->image }}')"
+                                                style="background-image: url('{{ asset('uploads/place/' . $images[$i]->image)  }}')"
                                                 title="{{ $place->name }}">
                                             </div>
-                                            <div class="gallery_count" title="Trip to Egypt: Pyramids & Nile by Air"
-                                                alt="Trip to Egypt: Pyramids & Nile by Air">
+                                            <div class="gallery_count" title="{{ $place->name }}"
+                                                alt="{{ $place->name }}">
                                                 {{ count($images) }} Photos </div>
                                         </div>
                                     @else
                                         <div class="sliderNavPhotoContain">
                                             <div class="sliderNavPhoto"
                                                 style="background-image: url('/uploads/place/{{ $images[$i]->image }}')"
-                                                title="Trip to Egypt: Pyramids & Nile by Air">
+                                                title="{{ $place->name }}">
                                             </div>
                                         </div>
                                     @endif
                                 @endfor
-                                {{--                                     
+                                {{--
                                     <div class="sliderNavPhotoContain">
-                                        <div class="sliderNavPhoto" style="background-image: url('https://images.memphistours.com/large/1270215224_Trip to Egypt Pyramids & Nile by Train.jpg')" title="Trip to Egypt: Pyramids & Nile by Air">
+                                        <div class="sliderNavPhoto" style="background-image: url('https://images.memphistours.com/large/1270215224_Trip to Egypt Pyramids & Nile by Train.jpg')" title="{{ $place->name }}">
                                         </div>
                                     </div> --}}
 
@@ -350,7 +360,7 @@
                                                         <div class="col-md-10 slickSlider">
                                                             @foreach ($images as $img)
                                                                 <div class="sliderMainPhoto"
-                                                                    style="background-image: url('/uploads/place/{{ $img->image }}')"
+                                                                    style="background-image: url('{{ asset('uploads/place/'.$img->image) }}')"
                                                                     title="{{ $place->name }}">
                                                                 </div>
                                                             @endforeach
@@ -358,7 +368,7 @@
                                                         <div class="col-md-2 slider-nav">
                                                             @foreach ($images as $img)
                                                                 <div class="sliderNavPhoto"
-                                                                    style="background-image: url('/uploads/place/{{ $img->image }}')"
+                                                                    style="background-image: url('{{ asset('uploads/place/'.$img->image) }}')"
                                                                     title="{{ $place->name }}">
                                                                 </div>
                                                             @endforeach
@@ -558,8 +568,10 @@
                                             <div class="program_itinerary_all_box">
                                                 @foreach ($days as $item)
                                                     <div class="program_itinerary_box">
-                                                        <div class="program_itinerary_box_title" data-lat="{{ $item->lat }}"
-                                                            data-lng="{{ $item->lng }}" data-link="{{ $item->day - 1 }}">
+                                                        <div class="program_itinerary_box_title"
+                                                            data-lat="{{ $item->lat }}"
+                                                            data-lng="{{ $item->lng }}"
+                                                            data-link="{{ $item->day - 1 }}">
                                                             <h2>Day {{ $item->day }}: {{ $item->title }}</h2>
                                                         </div>
                                                         <div class="program_itinerary_box_desc">
@@ -1272,7 +1284,9 @@
                             }
                         </style>
                         <a id="Form"></a>
-                        <form id="bookFormNew" method="post" action="/Egypt/reservation_forms/requests/mail/">
+                        @guest
+                            <form id="bookFormNew" method="post" action="{{ route('front.order', $place->slug) }}">
+                            @csrf
                             <div class="row">
                                 <div class="col-12">
                                     <label>Name *</label>
@@ -1300,9 +1314,16 @@
                                 <div class="col-12">
                                     <div class="form-group label-floating">
                                         <label>E-mail *</label>
-                                        <input name="UserEmail" value="" type="email" required
+                                        <input name="email" value="" type="email" required
                                             class="form-control" id="UserEmail" onfocusout="validateMail()">
                                         <div id="mail-validation"></div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group label-floating">
+                                        <label>Password *</label>
+                                        <input name="password" type="password" required
+                                            class="form-control" id="pass">
                                     </div>
                                 </div>
                             </div>
@@ -1881,13 +1902,19 @@
                                             <div class="col-7">
                                                 <div class="form-group label-floating">
                                                     <input type="text" class="form-control" value=""
-                                                        placeholder="Mobile" name="UserPhone" id="UserPhone">
+                                                        placeholder="Mobile" name="phone" id="UserPhone">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        @else
+                            @role('user')
+                                <form id="bookFormNew" method="post" action="{{ route('user.order', $place->slug) }}">
+                                    @csrf
+                            @endrole
+                        @endguest
                             <div class="row">
                                 <div class="col-6">
                                     <div class="form-group label-floating">
@@ -2051,22 +2078,23 @@
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <div id='recaptcha' class="g-recaptcha"
                                             data-sitekey="6LegDoYUAAAAALe9PVEiSlLyX3RzYBzKmoKrxMEz"
                                             data-callback="SubmitForm" data-size="invisible">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group">
-                                        <button class="new_btn_book" type="submit" id="Enquire-btn">Submit</button>
+                                        <input type="submit" value="Submit" class="new_btn_book" id="Enquire-btn">
+                                        {{-- <button class="new_btn_book" type="submit" id="">Submit</button> --}}
                                     </div>
                                 </div>
                             </div>
-                            <input type="hidden" id="sys_token" name="sys_token" value="engfpdrm97VkSX8">
-                            <input type="hidden" name="sys_package_id" value="57">
-                            <input type="hidden" id="url_goal" name="url_goal" value="package">
-                            <input type="hidden" id="program_id" name="program_id" value="146">
-                            <input type="hidden" id="initial_price" name="initial_price" value="1465">
+                            {{-- <input type="hidden" id="sys_token" name="sys_token" value="engfpdrm97VkSX8"> --}}
+                            {{-- <input type="hidden" name="sys_package_id" value="57"> --}}
+                            {{-- <input type="hidden" id="url_goal" name="url_goal" value="package"> --}}
+                            {{-- <input type="hidden" id="program_id" name="program_id" value="146"> --}}
+                            {{-- <input type="hidden" id="initial_price" name="initial_price" value="1465"> --}}
                         </form>
                     </div>
                 </div>
@@ -2264,121 +2292,510 @@
             </div>
         </div>
     </div>
-    
-    <script
-        src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=initialize&key=AIzaSyCN2jLP2y5WTC637u0nVZgJFW1zI1dyG74">
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vaafb692b2aea4879b33c060e79fe94621666317369993" integrity="sha512-0ahDYl866UMhKuYcW078ScMalXqtFJggm7TmlUtp0UlD4eQk0Ixfnm5ykXKvGJNFjLMoortdseTfsRT8oCfgGA==" data-cf-beacon='{"rayId":"779a0ce99a3b839d","token":"a383b74b961c437b9a4f634ad772c1b6","version":"2022.11.3","si":100}' crossorigin="anonymous"></script>
+</body>
+<script src="https://www.memphistours.com/cache_js/Com2021-all-jquery-combined-new.v1640264538.js"></script><script src="/com2021/js/bootstrap.bundle.min.js"></script> <script type="text/javascript">
+        jQuery(document).ready(function() {
+            jQuery.material.init();
+        });
     </script>
-    <script>
-        function initialize() {
+<script type="text/javascript" charset="utf-8">
+        jQuery(document).ready(function(){
+            jQuery("a[rel^='prettyPhoto']").prettyPhoto();
 
-            var markers = new Array();
-
-            var mapOptions = {
-                zoom: 9,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                center: new google.maps.LatLng({{ $days[0]->lat }}, {{ $days[0]->lng }})
-            };
-
-            var locations = [
-                @foreach ($days as $day)
-                    [new google.maps.LatLng({{ $day->lat }}, $day->lng), "Day {{ $day->day }}: Arrival in Cairo", "Day 1: Cairo Airport"],
-                @endforeach
-                // [new google.maps.LatLng(30.1128268, 31.3976017), "Day 1: Arrival in Cairo", "Day 1: Cairo Airport"],
-                // [new google.maps.LatLng(29.9772962, 31.1303068), "Day 2: Pyramids and Cairo Sightseeing",
-                //     "Day 2: Pyramids"
-                // ],
-                // [new google.maps.LatLng(25.718508, 32.6496197), "Day 3: Fly to Luxor - East Bank Sightseeing",
-                //     "Day 3: Luxor East Bank"
-                // ],
-                // [new google.maps.LatLng(25.74258, 32.5972163), "Day 4: West Bank Sightseeing",
-                // "Day 4: Luxor West Bank"],
-                // [new google.maps.LatLng(24.9751905, 32.8696805), "Day 5: Edfu and Kom Ombo", "Day 5: Edfu & Kom Ombo"],
-                // [new google.maps.LatLng(24.0923728, 32.8825965), "Day 6: Aswan Sightseeing", "Day 6: Aswan"],
-                // [new google.maps.LatLng(22.3372319, 31.6236103), "Day 7: Fly to Cairo - Optional Tour to Abu Simbel",
-                //     "Day 7: Abu Simbel"
-                // ],
-                // [new google.maps.LatLng(30.1128481, 31.3975822), "Day 8: Cairo - Fly Back Home",
-                // "Day 8: Cairo Airport"],
-            ];
-
-            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-            var infowindow = new google.maps.InfoWindow();
-
-            for (var i = 0; i < locations.length; i++) {
-
-                var marker = new google.maps.Marker({
-                    position: locations[i][0],
-                    map: map,
-                    title: locations[i][1],
+            jQuery(function() {
+                jQuery("img.lazy").lazyload({
+                    effect : "fadeIn"
                 });
 
-                // Register a click event listener on the marker to display the corresponding infowindow content
-                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                jQuery("div.lazy").lazyload({
+                    effect : "fadeIn"
+                });
 
-                    return function() {
-                        infowindow.setContent(locations[i][2]);
-                        infowindow.open(map, marker);
+            });
+        });
+    </script>
+<script type="text/javascript">
+        $(document).ready(function(){
+            $(".programBox_wishList").click(function() {
+                let element = this;
+                let link_data = $(this).data('program_id');
+                $.ajax({
+                    type: "POST",
+                    url: '/ajax/clients/set_wish_list/'+link_data,
+                    success: function(data) {
+                        if(data == 'success'){
+                            console.log($(element));
+                            $(element).attr( 'id', 'wish' );
+                        }else{
+                            $('a[data-program_id="' + link_data + '"] > i.whishstate').css({"color":"red"})
+                        }
+                    }
+                });
+            });
+
+            $(".programBox_wishList").each(function() {
+                let element = this;
+                let link_data = $(this).data('program_id');
+                
+            });
+        });
+
+    </script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script>
+        $('.modal').on('shown.bs.modal', function (e) {
+            $('.slickSlider').slick('setPosition', 0);
+            $('.slider-nav').slick('setPosition', 0);
+        });
+
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e) {
+            e.target
+            e.relatedTarget
+            $('.slickSlider').slick('setPosition', 0);
+            $('.slider-nav').slick('setPosition', 0);
+        });
+
+        $('.slickSlider').slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: true,
+            fade: true,
+            asNavFor: '.slider-nav',
+            prevArrow :'<button type="button" class="slick-prev"><svg xmlns="http://www.w3.org/2000/svg" width="33.556" height="55.701" viewBox="0 0 33.556 55.701"><g id="Arrow" transform="translate(0)"><g id="Rectangle_2162" data-name="Rectangle 2162" transform="translate(33.556 5.593) rotate(135)" fill="#212121" stroke="#fff" stroke-width="1"><rect width="39.546" height="7.909" stroke="none"/><rect x="0.5" y="0.5" width="38.546" height="6.909" fill="none"/></g><g id="Rectangle_2163" data-name="Rectangle 2163" transform="translate(27.963 55.701) rotate(-135)" fill="#212121" stroke="#fff" stroke-width="1"><rect width="39.546" height="7.909" stroke="none"/><rect x="0.5" y="0.5" width="38.546" height="6.909" fill="none"/></g></g></svg></button>',
+            nextArrow :'<button type="button" class="slick-next"><svg xmlns="http://www.w3.org/2000/svg" width="33.556" height="55.701" viewBox="0 0 33.556 55.701"><g id="Group_968" data-name="Group 968" transform="translate(-1266.566 -441.908)"><g id="Rectangle_2162" data-name="Rectangle 2162" transform="translate(1272.158 441.908) rotate(45)" fill="#212121" stroke="#fff" stroke-width="1"><rect width="39.546" height="7.909" stroke="none"/><rect x="0.5" y="0.5" width="38.546" height="6.909" fill="none"/></g><g id="Rectangle_2163" data-name="Rectangle 2163" transform="translate(1266.566 492.016) rotate(-45)" fill="#212121" stroke="#fff" stroke-width="1"><rect width="39.546" height="7.909" stroke="none"/><rect x="0.5" y="0.5" width="38.546" height="6.909" fill="none"/></g></g></svg></button>'
+        });
+        $('.slider-nav').slick({
+            slidesToShow: 5,
+            slidesToScroll: 1,
+            asNavFor: '.slickSlider',
+            arrows: false,
+            dots: false,
+            centerMode: false,
+            focusOnSelect: true,
+            infinity: true,
+            vertical: true
+        });
+
+        $('.slickMainSlider').slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: false,
+            fade: true,
+            asNavFor: '.sliderMainNav',
+        });
+        $('.sliderMainNav').slick({
+            slidesToShow: 5,
+            slidesToScroll: 1,
+            asNavFor: '.slickMainSlider',
+            arrows: false,
+            dots: false,
+            centerMode: false,
+            focusOnSelect: true,
+            vertical: true
+        });
+    </script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=initialize&key=AIzaSyCN2jLP2y5WTC637u0nVZgJFW1zI1dyG74"></script>
+<script>
+                function initialize() {
+
+                    var markers = new Array();
+
+                    var mapOptions = {
+                        zoom: 9,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                        center: new google.maps.LatLng(30.1128268, 31.3976017)
+                    };
+
+                    var locations = [
+                                                [new google.maps.LatLng(30.1128268, 31.3976017), "Day 1: Arrival in Cairo", "Day 1: Cairo Airport"],
+                                                [new google.maps.LatLng(29.9772962, 31.1303068), "Day 2: Pyramids and Cairo Sightseeing", "Day 2: Pyramids"],
+                                                [new google.maps.LatLng(25.718508, 32.6496197), "Day 3: Fly to Luxor - East Bank Sightseeing", "Day 3: Luxor East Bank"],
+                                                [new google.maps.LatLng(25.74258, 32.5972163), "Day 4: West Bank Sightseeing", "Day 4: Luxor West Bank"],
+                                                [new google.maps.LatLng(24.9751905, 32.8696805), "Day 5: Edfu and Kom Ombo", "Day 5: Edfu & Kom Ombo"],
+                                                [new google.maps.LatLng(24.0923728, 32.8825965), "Day 6: Aswan Sightseeing", "Day 6: Aswan"],
+                                                [new google.maps.LatLng(22.3372319, 31.6236103), "Day 7: Fly to Cairo - Optional Tour to Abu Simbel", "Day 7: Abu Simbel"],
+                                                [new google.maps.LatLng(30.1128481, 31.3975822), "Day 8: Cairo - Fly Back Home", "Day 8: Cairo Airport"],
+                                            ];
+
+                    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+                    var infowindow = new google.maps.InfoWindow();
+
+                    for (var i = 0; i < locations.length; i++) {
+
+                        var marker = new google.maps.Marker({
+                            position: locations[i][0],
+                            map: map,
+                            title: locations[i][1],
+                        });
+
+                        // Register a click event listener on the marker to display the corresponding infowindow content
+                        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+
+                            return function () {
+                                infowindow.setContent(locations[i][2]);
+                                infowindow.open(map, marker);
+                            }
+
+                        })(marker, i));
+
+                        // Add marker to markers array
+                        markers.push(marker);
                     }
 
-                })(marker, i));
+                    // Trigger a click event on each marker when the corresponding marker link is clicked
+                    $('.program_itinerary_box_title').on('click', function () {
+                        google.maps.event.trigger(markers[$(this).data('link')], 'click');
+                    });
 
-                // Add marker to markers array
-                markers.push(marker);
+                    const flightPlanCoordinates = [
+                                                { lat: 30.1128268, lng: 31.3976017 },
+                                                { lat: 29.9772962, lng: 31.1303068 },
+                                                { lat: 25.718508, lng: 32.6496197 },
+                                                { lat: 25.74258, lng: 32.5972163 },
+                                                { lat: 24.9751905, lng: 32.8696805 },
+                                                { lat: 24.0923728, lng: 32.8825965 },
+                                                { lat: 22.3372319, lng: 31.6236103 },
+                                                { lat: 30.1128481, lng: 31.3975822 },
+                                            ];
+                    const flightPath = new google.maps.Polyline({
+                        path: flightPlanCoordinates,
+                        geodesic: true,
+                        strokeColor: "#707070",
+                        strokeOpacity: 1.0,
+                        strokeWeight: 2,
+                    });
+                    flightPath.setMap(map);
+                }
+
+                initialize();
+            </script>
+{{-- <script src="https://www.google.com/recaptcha/api.js?hl=en" async defer></script> --}}
+<script>
+        // $( document ).ready(function() {
+        //     function onload() {
+        //     var element = document.getElementById('Enquire-btn');
+        //     element.onclick = validate;
+        //   }
+        //   onload();
+        // });
+
+        // function validate(event) {
+        //     event.preventDefault();
+        //     $("#bookFormNew").validate();
+        //     var isFormValid = $("#bookFormNew").valid();
+        //     if (isFormValid) {
+        //         grecaptcha.execute();
+        //     }
+        // }
+
+        // function SubmitForm(data) {
+        //     if ($("#gRecaptchaResponse").val() == '') {
+        //          $("#gRecaptchaResponse").val(data);
+        //     }
+        //     document.getElementById("bookFormNew").submit();
+        // }
+        jQuery(function() {
+                  jQuery("#datepickerArrival2").datepicker({
+                defaultDate: '+1d',
+                dateFormat: 'dd/mm/yy',
+                showOn: "both",
+                buttonText: "<i class='far fa-calendar-alt'></i>",
+                buttonImageOnly: false,
+                minDate: 1,
+                onClose: function( selectedDate ) {
+                    jQuery( "#datepickerDeparture2" ).datepicker( "option", "minDate", selectedDate );
+                }
+          });
+                jQuery( "#datepickerDeparture2" ).datepicker({
+            defaultDate: "+1d",
+            dateFormat: 'dd/mm/yy',
+            showOn: "both",
+            buttonText: "<i class='far fa-calendar-alt'></i>",
+            buttonImageOnly: false,
+            minDate: 0,
+        });
+    });
+
+        function updateAgeFieldsAll(a, b, c) {
+            var d = $("[ageDesc='" + c + "']");
+            d.find(".age-input-div").length && d.find(".age-input-div").remove();
+            for (var e = 0; b > e; e++) {
+                if( c == "infant"){
+                    var f = $("#ageInputDiv").clone().removeAttr("id").addClass("hidden age-input-div").removeClass("form-group label-floating");
+                    f.find(".div-1").html("<input id='" + c + e + "' type='hidden' size='3' class='form-control' maxlength='2'  min='1' value='1.99' max='11.99' name='infants_age[" + c + "_" + e + "]' />"), d.append(f.removeClass("hidden"))
+                }else{
+                    var f = $("#ageInputDiv").clone().removeAttr("id").addClass("col-md-6 age-input-div");
+                    f.find(".div-0").html("<label for='" + c + e + "'>Age of Child "+ (e+1) +"</label>"), f.find(".div-1").html("<input id='" + c + e + "' type='number' size='3' class='form-control' value=''  maxlength='2' required min='2' max='11.99' name='children_age[" + c + "_" + e + "]' />"), d.append(f.removeClass("hidden"))
+                }
             }
-
-            // Trigger a click event on each marker when the corresponding marker link is clicked
-            $('.program_itinerary_box_title').on('click', function() {
-                google.maps.event.trigger(markers[$(this).data('link')], 'click');
-            });
-
-            const flightPlanCoordinates = [
-                @foreach ($days as $tour)
-                    {
-                        lat: {{ $tour->lat }},
-                        lng: {{ $tour->lng }}
-                    },
-                @endforeach
-                
-                // {
-                //     lat: 29.9772962,
-                //     lng: 31.1303068
-                // },
-                // {
-                //     lat: 25.718508,
-                //     lng: 32.6496197
-                // },
-                // {
-                //     lat: 25.74258,
-                //     lng: 32.5972163
-                // },
-                // {
-                //     lat: 24.9751905,
-                //     lng: 32.8696805
-                // },
-                // {
-                //     lat: 24.0923728,
-                //     lng: 32.8825965
-                // },
-                // {
-                //     lat: 22.3372319,
-                //     lng: 31.6236103
-                // },
-                // {
-                //     lat: 30.1128481,
-                //     lng: 31.3975822
-                // },
-            ];
-            const flightPath = new google.maps.Polyline({
-                path: flightPlanCoordinates,
-                geodesic: true,
-                strokeColor: "#707070",
-                strokeOpacity: 1.0,
-                strokeWeight: 2,
-            });
-            flightPath.setMap(map);
         }
 
-        initialize();
+        function updateAgeSelectionAll(a) {
+            var b = 0,
+                c = 0,
+                d = $('[id^="ageBands\\["]');
+            d.each(function() {
+                b += parseInt($(this).val())
+            }), c = a - b, d.each(function() {
+                var a = $(this),
+                    b = parseInt(a.val()) + c,
+                    d = a.val(),
+                    e = 0;
+                a.val(d)
+            })
+        }
+
+        function paxOnChangeAll(a, b, c, d, e) {
+            "Adult" === c ? updateAgeSelectionAll(e) : (updateAgeFieldsAll(a, b, c.toLowerCase()), updateAgeSelectionAll(e))
+        }
+
+        function validateMail() {
+
+            let mailValue = jQuery('#UserEmail').val();
+            // var settings = {
+            //     "url": "https://api.sendgrid.com/v3/validations/email",
+            //     "method": "POST",
+            //     "timeout": 0,
+            //     "headers": {
+            //         "Authorization": "Bearer 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",
+            //         "Content-Type": "text/plain"
+            //     },
+            //     "data": "{\r\n    \"email\": \""+mailValue+"\",\r\n     \"source\": \"Requests\"\r\n}",
+            // };
+
+            // if(mailValue.length > 1) {
+            //     $.ajax(settings).done(function (response) {
+            //         if (response.result.verdict == "Invalid") {
+            //             jQuery('#UserEmail').css({"border": "1px solid red", "color": "red"});
+            //             jQuery('#Enquire-btn').attr('disabled', 'disabled')
+            //             jQuery('#mail-validation').html('Please enter a Valid Email');
+            //             jQuery('#mail-validation').css({"margin-bottom": "10px", "color": "red"});
+            //         } else {
+            //             jQuery('#UserEmail').css({"border": "1px solid #757575", "color": "#757575"});
+            //             jQuery('#Enquire-btn').removeAttr('disabled');
+            //             jQuery('#mail-validation').html('');
+            //             jQuery('#mail-validation').css({"margin-bottom": "10px", "color": "red"});
+            //         }
+
+            //     });
+            // }
+
+        }
+    </script>
+<script type="text/javascript">
+                                updateAgeSelectionAll(9);
+            </script>
+<script type="text/javascript">
+                                updateAgeSelectionAll(9);
+            </script>
+<script>
+
+        jQuery('.btn-number.book_all').click(function(e){
+            e.preventDefault();
+
+            fieldName = jQuery(this).attr('data-field');
+            type      = jQuery(this).attr('data-type');
+            var input = jQuery("input[id='"+fieldName+"']");
+
+            var currentVal = parseInt(input.val());
+
+            if (!isNaN(currentVal)) {
+                if(type == 'minus') {
+
+                    if(currentVal > input.attr('min')) {
+                        input.val(currentVal - 1).change();
+                    }
+                    if(parseInt(input.val()) == input.attr('min')) {
+                        jQuery(this).attr('disabled', true);
+                    }
+
+                } else if(type == 'plus') {
+
+                    if(currentVal < input.attr('max')) {
+                        input.val(currentVal + 1).change();
+                    }
+                    if(parseInt(input.val()) == input.attr('max')) {
+                        jQuery(this).attr('disabled', true);
+                    }
+
+                }
+            } else {
+                input.val(1);
+            }
+        });
+        jQuery('.input-number.book_all').focusin(function(){
+            jQuery(this).data('oldValue', jQuery(this).val());
+        });
+        jQuery('.input-number.book_all').change(function() {
+
+            minValue =  parseInt(jQuery(this).attr('min'));
+            maxValue =  parseInt(jQuery(this).attr('max'));
+            valueCurrent = parseInt(jQuery(this).val());
+
+            name = jQuery(this).attr('id');
+            if(valueCurrent >= minValue) {
+                jQuery(".btn-number.book_all[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+            } else {
+                alert('Sorry, the minimum value was reached');
+                jQuery(this).val(jQuery(this).data('oldValue'));
+            }
+            if(valueCurrent <= maxValue) {
+                jQuery(".btn-number.book_all[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+            } else {
+                alert('Sorry, the maximum value was reached');
+                jQuery(this).val(jQuery(this).data('oldValue'));
+            }
+
+
+        });
+        jQuery(".input-number.book_all").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if (jQuery.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        jQuery.material.init();
+        jQuery.material.checkbox();
+
+        function valueChanged(){
+            if(jQuery('.flight').is(":checked")) {
+                jQuery("#departure_airport").attr("required", true);
+                jQuery(".flight_from").show();
+            }else{
+                jQuery(".flight_from").hide();
+                jQuery("#departure_airport").attr("required", false);
+            }
+        }
+
+        function childAge(){
+            if(jQuery('.children').val().length != 0) {
+                jQuery(".children_age").attr("required", true);
+            }else{
+                jQuery(".children_age").attr("required", false);
+            }
+        }
+    </script>
+<script>
+        jQuery(document).ready(function(){
+            jQuery("#check_btn").on('click', function(event) {
+
+                // Prevent default anchor click behavior
+                event.preventDefault();
+
+                // Store hash
+                var hash = this.hash;
+
+                var body = jQuery('html, body');
+                // Using jQuery's animate() method to add smooth page scroll
+                // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+                body.animate({
+                    scrollTop: jQuery(hash).offset().top - 200
+                }, 800, function(){
+
+                    body.animate({
+                        scrollTop: jQuery(hash).offset().top - 200
+                    });
+                    // Add hash (#) to URL when done scrolling (default click behavior)
+                    //window.location.hash = hash;
+                });
+            });
+
+            jQuery('#myTabs a').click(function (e) {
+                e.preventDefault()
+                jQuery(this).tab('show')
+            });
+        });
+    </script>
+<script type="text/javascript">
+    var currenciesExArray = new Array();
+    var currenciesSignArray = new Array();
+    var currenciesAbbrevArray = new Array();
+    var currenciesAbbrevTextArray = new Array();
+
+            currenciesExArray['1'] = "1.00000";
+        currenciesSignArray['1'] ="US$";
+        currenciesAbbrevArray['1'] ="USD (US$)";
+        currenciesAbbrevTextArray['1'] ="USD";
+
+
+            currenciesExArray['2'] = "0.94086";
+        currenciesSignArray['2'] ="&euro;";
+        currenciesAbbrevArray['2'] ="EUR (&euro;)";
+        currenciesAbbrevTextArray['2'] ="EUR";
+
+
+            currenciesExArray['3'] = "0.80891";
+        currenciesSignArray['3'] ="&pound;";
+        currenciesAbbrevArray['3'] ="GBP (&pound;)";
+        currenciesAbbrevTextArray['3'] ="GBP";
+
+
+            currenciesExArray['4'] = "1.45900";
+        currenciesSignArray['4'] ="AU$";
+        currenciesAbbrevArray['4'] ="AUD (AU$)";
+        currenciesAbbrevTextArray['4'] ="AUD";
+
+
+        function updateSiteRatesTop(current_currency,session_update){
+        jQuery(".curr_contain#currency").find('li').show();
+        jQuery("#e"+current_currency).hide();
+        jQuery(".convertable").each(function(){
+                var id = jQuery(this).attr('id');
+                var current_value = jQuery('#h'+id).val();
+
+                if(!isNaN(parseFloat(current_value))){
+
+                    var new_value = parseFloat(current_value) * parseFloat(currenciesExArray[current_currency]);
+                    var rounded_value = Math.round(new_value*Math.pow(10,0))/Math.pow(10,0);;
+                    jQuery(this).html(rounded_value);
+                }
+        });
+
+        jQuery(".currencySign").html(currenciesSignArray[current_currency]);
+        jQuery(".currencySign3").html(currenciesAbbrevArray[current_currency]);
+        jQuery(".currencySignText").html(currenciesAbbrevTextArray[current_currency]);
+
+        if(session_update){
+            jQuery.ajax({ url: '/ajax/dashboard/update_currency_session/'+current_currency });
+        }
+    }
+
+
+    jQuery(document).ready(function(){
+        jQuery("ul.subnav_top").parent().append(""); //Only shows drop down trigger when js is enabled (Adds empty span tag after ul.subnav*)
+        jQuery("ul.topnav_top li .hover").mouseover(function() { //When trigger is clicked...
+            //Following events are applied to the subnav itself (moving subnav up and down)
+
+            jQuery(this).parent().find("ul.subnav_top").slideDown('fast').show(); //Drop down the subnav on click
+            jQuery(this).parent().hover(function() {
+            }, function(){
+                jQuery(this).parent().find("ul.subnav_top").slideUp('slow'); //When the mouse hovers out of the subnav, move it back up
+            });
+
+            //Following events are applied to the trigger (Hover events for the trigger)
+            }).hover(function() {
+                jQuery(this).addClass("subhover"); //On hover over, add class "subhover"
+            }, function(){  //On Hover Out
+                jQuery(this).removeClass("subhover"); //On hover out, remove class "subhover"
+        });
+
+    });
+
+
+    jQuery(document).ready(function(){
+        updateSiteRatesTop('1',false);
+    });
     </script>
 @endsection
