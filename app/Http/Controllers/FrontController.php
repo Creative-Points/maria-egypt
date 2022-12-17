@@ -99,6 +99,11 @@ class FrontController extends Controller
             $orderid = DB::table('orders')->insertGetId([
                 'user_id' => $id,
                 'place_id' => $place->id,
+                'arrival' => $request->arrival,
+                'departure' => $request->departure,
+                'adults' => $request->adults,
+                'children' => $request->children,
+                'infants' => $request->infants,
                 'created_at' => now(),
             ]);
             return back()->with('status', 'Successfully.');
