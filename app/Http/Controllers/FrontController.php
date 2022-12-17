@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Place;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -77,16 +78,16 @@ class FrontController extends Controller
             'nationality' => 'required|string',
             'arrival' => 'required|string',
             'departure' => 'required|string',
-            'adults' => 'numeric',
-            'children' => 'numeric',
-            'infants' => 'numeric',
+            'adults' => 'numeric|nullable',
+            'children' => 'numeric|nullable',
+            'infants' => 'numeric|nullable',
             'comment' => 'string|nullable'
         ]);
         if($valid->fails())
         {
             return back()->withInput()->withErrors($valid);
         }else{
-            $id = User::create([
+            $user = User::create([
                 'title' => $request->title,
                 'name' => $request->name,
                 'password' => Hash::make($request->password),
@@ -94,18 +95,21 @@ class FrontController extends Controller
                 'phone' => $request->phone,
                 'phone_ext' => $request->phone_ext,
                 'nation' => $request->nationality,
-                'created_at' => now(),
+                // 'created_at' => now(),
             ])->assignRole('user');
-            $orderid = DB::table('orders')->insertGetId([
-                'user_id' => $id,
+            Order::create([
+                'user_id' => $user->id,
                 'place_id' => $place->id,
                 'arrival' => $request->arrival,
                 'departure' => $request->departure,
                 'adults' => $request->adults,
                 'children' => $request->children,
                 'infants' => $request->infants,
-                'created_at' => now(),
             ]);
+            // $orderid = DB::table('orders')->insertGetId([
+                
+            //     'created_at' => now(),
+            // ]);
             return back()->with('status', 'Successfully.');
         }
     }
