@@ -1260,9 +1260,9 @@
                         <div class="program_new_right_side_price_data">
                             <span class="from">from</span>
                             <span class="price">
-                                <span class="currencySign">$</span><span id="min_price1465"
+                                <span class="currencySign">$</span><span id="min_price{{ $place->price }}"
                                     class="convertable">{{ $place->price }}</span>
-                                <input type="hidden" id="hmin_price1465" value="1465" />
+                                <input type="hidden" id="hmin_price{{ $place->price }}" value="{{ $place->price }}" />
                             </span>
                         </div>
                     </div>
@@ -2337,7 +2337,7 @@
             $(".programBox_wishList").each(function() {
                 let element = this;
                 let link_data = $(this).data('program_id');
-                
+
             });
         });
 
