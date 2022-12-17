@@ -110,7 +110,7 @@ class FrontController extends Controller
                 
             //     'created_at' => now(),
             // ]);
-            return back()->with('status', 'Successfully.');
+            return back()->with('status', 'Successfully. Login to your account now.');
         }
     }
 }
