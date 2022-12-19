@@ -347,7 +347,7 @@
                 </ul>
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="loginTab" role="tabpanel" aria-labelledby="login-tab">
-                        <div class="row" id="socialLoginWrapper">
+                        {{-- <div class="row" id="socialLoginWrapper">
                             <div class="col-12">
                                 <a class="social-login-button"
                                     href="https://www.memphistours.com//theme/clients/getGoogleURL">
@@ -401,8 +401,8 @@
                                     </span>
                                 </a>
                             </div>
-                        </div>
-                        <div class="row align-items-center my-3 no-gutters">
+                        </div> --}}
+                        {{-- <div class="row align-items-center my-3 no-gutters">
                             <div class="col">
                                 <div class="border border-bottom-0"></div>
                             </div>
@@ -410,7 +410,7 @@
                             <div class="col">
                                 <div class="border border-bottom-0"></div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="client_login_form">
                             <form method="post" accept-charset="utf-8" action="{{ route('login') }}">
                                 @csrf
@@ -446,12 +446,12 @@
                             <div class="form_links d-flex align-items-center justify-content-between">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value=""
-                                        name="remember_me" id="RememberMe">
+                                        name="remember" id="RememberMe">
                                     <label class="form-check-label" for="RememberMe">
                                         Remember me </label>
                                 </div>
                                 <div class="forgetpass">
-                                    <a href="https://www.memphistours.com//theme/clients/forgotPassword">Forgot
+                                    <a href="{{ route('password.request') }}">Forgot
                                         Password?</a>
                                 </div>
                             </div>
@@ -459,9 +459,8 @@
                     </div>
                     <div class="tab-pane fade" id="signupTab" role="tabpanel" aria-labelledby="signup-tab">
                         <div class="client_login_form">
-                            <form method="post" accept-charset="utf-8" action="/clients/register">
-                                <div style="display:none;"><input type="hidden" name="_method" value="POST" />
-                                </div>
+                            <form method="post" accept-charset="utf-8" action="{{ route('register') }}">
+                                @csrf
                                 <div class="mb-4">
                                     <label class="form-label">Email Address</label>
                                     <div class="input mail required"><input type="mail" name="email"
@@ -481,7 +480,7 @@
                                 <div class="mb-4">
                                     <label class="form-label">Confirm Password</label>
                                     <div class="input password required"><input type="password"
-                                            name="confirm_password" class="form-control" required="required"
+                                            name="password_confirmation" class="form-control" required="required"
                                             id="confirm-password" /></div>
                                 </div>
                                 <div class="col-12">

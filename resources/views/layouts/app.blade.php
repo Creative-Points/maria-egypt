@@ -39,6 +39,9 @@
                         <li class="nav-item">
                             <a class="nav-link @if(route('admin.place.manage') == request()->routeIs('admin.place.manage'))active @endif" href="{{ route('admin.place.manage') }}">{{ __('Places') }}</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if(route('admin.order.manage') == request()->routeIs('admin.order.manage'))active @endif" href="{{ route('admin.order.manage') }}">{{ __('Orders') }}</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

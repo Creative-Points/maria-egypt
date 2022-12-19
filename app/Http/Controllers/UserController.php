@@ -12,6 +12,13 @@ class UserController extends Controller
     public function profile()
     {
         $user = auth()->user();
+        // foreach($user AS $us)
+        // {
+        //     if($us == NULL)
+        //     {
+        //         return 1;
+        //     }
+        // }
         return view('user.profile', compact('user'));
     }
 

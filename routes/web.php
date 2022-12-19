@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\PlaceController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,18 @@ Route::middleware(['auth', 'role:admin'])->prefix('dashboard')->name('admin.')->
         Route::get('/{city:id}/active', 'active')->name('active');
         Route::get('/{city:id}/unactive', 'unactive')->name('unactive');
         Route::delete('/{city:id}/delete', 'destroy')->name('delete');
+    });
+
+    Route::controller(OrderController::class)->name('order.')->prefix('orders')->group(function(){
+        Route::get('/', 'index')->name('manage');
+        // Route::get('/add-new', 'create')->name('create');
+        // Route::post('/add-new', 'store')->name('store');
+        // Route::get('/{city:id}/edit', 'edit')->name('edit');
+        // Route::put('/{city:id}/edit', 'update')->name('update');
+        // Route::get('/{city:id}/view', 'show')->name('view');
+        // Route::get('/{city:id}/active', 'active')->name('active');
+        // Route::get('/{city:id}/unactive', 'unactive')->name('unactive');
+        // Route::delete('/{city:id}/delete', 'destroy')->name('delete');
     });
 
     Route::controller(PlaceController::class)->name('place.')->prefix('places')->group(function(){
