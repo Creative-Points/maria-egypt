@@ -96,10 +96,10 @@
                         </div>
                         <div class="profile_header_rp d-flex justify-content-center flex-column align-items-center">
                             <a class="d-flex justify-content-center flex-column align-items-center"
-                                href="/clients/my_reviews" title="My Reviews">
-                                <div class="num">
-                                    0 </div>
-                                <div class="txt"> My Reviews </div>
+                                href="{{ route('user.setting') }}" title="My Info">
+                                {{-- <div class="num">
+                                    0 </div> --}}
+                                <div class="txt"> My Info </div>
                             </a>
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                 <div class="top-destination">
                     <div class="d-flex align-items-center justify-content-between">
                         <h1>Tours</h1>
-                        <div class="top-destination-more"><a href="/clients/wishlist" title="View All" alt="View All">View
+                        <div class="top-destination-more"><a href="#" title="View All" alt="View All">View
                                 All</a> </div>
                     </div>
                 </div>

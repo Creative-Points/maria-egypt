@@ -35,6 +35,12 @@ class UserController extends Controller
         return view('user.profile', compact('user', 'orders'));
     }
 
+    public function setting()
+    {
+        $user = auth()->user();
+        return view('user.setting', compact('user'));
+    }
+
     public function order(Request $request, Place $place)
     {
         $valid = Validator::make($request->all(), [

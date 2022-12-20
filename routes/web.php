@@ -35,6 +35,7 @@ Route::controller(FrontController::class)->name('front.')->group(function(){
 
 Route::middleware(['auth', 'role:user'])->controller(UserController::class)->name('user.')->group(function(){
     Route::get('/home', 'profile')->name('home');
+    Route::get('/settings', 'setting')->name('setting');
     Route::post('/tours-order/{place:slug}', 'order')->name('order');
 });
 
