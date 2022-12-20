@@ -63,7 +63,8 @@
                 <div class="container">
                     <div class="d-flex justify-content-center flex-column align-items-center">
                         <div class="profile_header_img">
-                            <img src="https://lh3.googleusercontent.com/a/ALm5wu2rH_n9UYn24O8grwoTo5gOa7y_Pe1-7w3DCPfN=s96-c" width="100%">
+                            <img src="https://lh3.googleusercontent.com/a/ALm5wu2rH_n9UYn24O8grwoTo5gOa7y_Pe1-7w3DCPfN=s96-c"
+                                width="100%">
                         </div>
                         <div class="profile_header_name text-center">
                             {{ $user->name }}</div>
@@ -81,7 +82,7 @@
                             <a class="d-flex justify-content-center flex-column align-items-center" href="/clients/my_tours"
                                 title="My Tours">
                                 <div class="num">
-                                    0 </div>
+                                    {{ count($orders) }} </div>
                                 <div class="txt"> My Tours </div>
                             </a>
                         </div>
@@ -112,14 +113,43 @@
             <div class="col-12">
                 <div class="top-destination">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h1>Wishlist</h1>
+                        <h1>Tours</h1>
                         <div class="top-destination-more"><a href="/clients/wishlist" title="View All" alt="View All">View
                                 All</a> </div>
                     </div>
                 </div>
             </div>
-            <div class="col-12">
+            <div class="col-8">
                 <div class="row">
+                    <table class="table table-dark table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Tour</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($orders as $order)
+                                <tr>
+                                    <td scope="row">{{ $order->order_id }}</td>
+                                    <td>{{ $order->name }}</td>
+                                    <td>
+                                        @if ($order->order_status == 0)
+                                            <span class='text-info'>New</span>
+                                        @elseif ($order->order_status == 1)
+                                            <span class='text-warning'>Progress</span>
+                                        @elseif ($order->order_status == 2)
+                                            <span class='text-success'>Complated</span>
+                                        @elseif ($order->order_status == 3)
+                                            <span class='text-danger'>Canceled</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

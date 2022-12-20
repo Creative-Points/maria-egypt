@@ -12,14 +12,27 @@ class UserController extends Controller
     public function profile()
     {
         $user = auth()->user();
-        // foreach($user AS $us)
-        // {
-        //     if($us == NULL)
-        //     {
-        //         return 1;
-        //     }
-        // }
-        return view('user.profile', compact('user'));
+        $orders = DB::table('orders')
+                ->join('users', 'orders.user_id', '=', 'users.id')
+                ->join('places', 'orders.place_id', '=', 'places.id')
+                ->join('images', 'images.place_id', '=', 'places.id')
+                ->where('images.flag', '=', 1)
+                ->where('orders.user_id', '=', $user->id)
+                ->select([
+                    'orders.*', 
+                    'orders.created_at as ca', 
+                    'orders.id as order_id', 
+                    // 'users.id as user_id', 
+                    'places.id as place_id', 
+                    'orders.status as order_status', 
+                    // 'users.*', 
+                    'places.*', 
+                    'images.image', 
+                    // 'users.name as username'
+                ])
+                ->orderBy('orders.created_at', 'desc')
+                ->get();
+        return view('user.profile', compact('user', 'orders'));
     }
 
     public function order(Request $request, Place $place)

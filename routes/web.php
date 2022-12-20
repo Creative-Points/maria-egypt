@@ -60,10 +60,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('dashboard')->name('admin.')->
         // Route::post('/add-new', 'store')->name('store');
         // Route::get('/{city:id}/edit', 'edit')->name('edit');
         // Route::put('/{city:id}/edit', 'update')->name('update');
-        // Route::get('/{city:id}/view', 'show')->name('view');
-        // Route::get('/{city:id}/active', 'active')->name('active');
-        // Route::get('/{city:id}/unactive', 'unactive')->name('unactive');
-        // Route::delete('/{city:id}/delete', 'destroy')->name('delete');
+        Route::get('/user/{user:id}/view', 'showUser')->name('viewUser');
+        Route::get('/{order:id}/as-new', 'new')->name('new');
+        Route::get('/{order:id}/progress', 'progress')->name('progress');
+        Route::get('/{order:id}/complete', 'complete')->name('complete');
+        Route::get('/{order:id}/cancel', 'cancel')->name('cancel');
+        // Route::delete('/{order:id}/delete', 'destroy')->name('delete');
     });
 
     Route::controller(PlaceController::class)->name('place.')->prefix('places')->group(function(){
