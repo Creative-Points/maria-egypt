@@ -38,6 +38,7 @@ Route::middleware(['auth', 'role:user'])->controller(UserController::class)->nam
     Route::get('/settings', 'setting')->name('setting');
     Route::put('/settings', 'save_setting')->name('save_setting');
     Route::post('/tours-order/{place:slug}', 'order')->name('order');
+    Route::get('/tours-order/{place:slug}', 'oldOrder')->name('oldorder');
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('dashboard')->name('admin.')->group(function(){

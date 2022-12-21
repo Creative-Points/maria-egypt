@@ -142,14 +142,16 @@ class UserController extends Controller
             'adults' => 'required|numeric',
             'children' => 'required|numeric',
             'infants' => 'required|numeric',
+            'save' => 'string|max:5',
             'comment' => 'string|nullable'
         ]);
         if($valid->fails())
         {
             return back()->withInput()->withErrors($valid);
         }else{
-            $orderid = DB::table('orders')->insertGetId([
-                'user_id' => auth()->user()->id,
+            $user = auth()->user();
+            DB::table('orders')->insertGetId([
+                'user_id' => $user->id,
                 'place_id' => $place->id,
                 'arrival' => $request->arrival,
                 'departure' => $request->departure,
@@ -158,7 +160,60 @@ class UserController extends Controller
                 'infants' => $request->infants,
                 'created_at' => now(),
             ]);
+            if(isset($request->save))
+            {
+                $old = DB::table('order_details')
+                        ->where('user_id', '=', $user->id)
+                        ->get();
+                if(count($old) > 0)
+                {
+                    foreach($old as $old)
+                    {
+                        DB::table('order_details')
+                        ->where('user_id', '=', $user->id)
+                        ->update([
+                            'arrival' => $request->arrival,
+                            'departure' => $request->departure,
+                            'adults' => $request->adults,
+                            'children' => $request->children,
+                            'infants' => $request->infants,
+                            'created_at' => now(),
+                        ]);
+                    }
+                }else{
+                    DB::table('order_details')
+                    ->insert([
+                        'user_id' => $user->id,
+                        'arrival' => $request->arrival,
+                        'departure' => $request->departure,
+                        'adults' => $request->adults,
+                        'children' => $request->children,
+                        'infants' => $request->infants,
+                        'created_at' => now(),
+                    ]);
+                }
+            }
             return back()->with('status', 'Successfully.');
         }
+    }
+
+    public function oldOrder(Place $place)
+    {
+        $user = auth()->user();
+        $old = DB::table('order_details')
+                ->where('user_id', '=', $user->id)
+                ->get();
+        DB::table('orders')->insert([
+            'user_id' => $user->id,
+            'place_id' => $place->id,
+            'arrival' => $old[0]->arrival,
+            'departure' => $old[0]->departure,
+            'adults' => $old[0]->adults,
+            'children' => $old[0]->children,
+            'infants' => $old[0]->infants,
+            'created_at' => now(),
+        ]);
+        
+        return back()->with('status', 'Successfully.');
     }
 }

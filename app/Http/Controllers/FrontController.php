@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class FrontController extends Controller
 {
@@ -33,7 +34,24 @@ class FrontController extends Controller
         $images = DB::table('images')->where('place_id', '=', $place->id)->get();
         $days = DB::table('itinerary')->where('place_id', '=', $place->id)->get();
         // return var_dump($images);
-        return view('tour', compact('place', 'images', 'days'));
+        $tours = DB::table('places')
+                    ->join('images', 'images.place_id', '=', 'places.id')
+                    ->select('places.*', 'images.image')
+                    ->where('images.flag', '=', 1)
+                    ->where('places.status', '=', 1)
+                    ->whereNotIn('places.id', [$place->id])
+                    ->inRandomOrder()
+                    ->limit(6)
+                    ->get();
+        if(Auth::check())
+        {
+            $old = DB::table('order_details')
+                ->where('user_id', '=', auth()->user()->id)
+                ->get();
+            return view('tour', compact('place', 'images', 'days', 'old', 'tours'));
+        }
+        
+        return view('tour', compact('place', 'images', 'days', 'tours'));
     }
 
     /**
@@ -106,10 +124,19 @@ class FrontController extends Controller
                 'children' => $request->children,
                 'infants' => $request->infants,
             ]);
-            // $orderid = DB::table('orders')->insertGetId([
-                
-            //     'created_at' => now(),
-            // ]);
+            if(isset($request->save))
+            {
+                DB::table('order_details')
+                ->insert([
+                    'user_id' => $user->id,
+                    'arrival' => $request->arrival,
+                    'departure' => $request->departure,
+                    'adults' => $request->adults,
+                    'children' => $request->children,
+                    'infants' => $request->infants,
+                    'created_at' => now(),
+                ]);
+            }
             return back()->with('status', 'Successfully. Login to your account now.');
         }
     }
