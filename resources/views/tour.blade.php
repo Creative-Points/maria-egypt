@@ -40,6 +40,9 @@
         @if (session('status'))
             <div class="alert alert-success">{{ session('status') }}</div>
         @endif
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}. <a href='{{ route('user.setting') }}'>Go To Setting</a></div>
+        @endif
         @if ($errors->any())
             <ul class="alert alert-danger">
                 @foreach ($errors->all() as $err)

@@ -147,6 +147,9 @@
                                     </td>
                                 </tr>
                             @empty
+                                <tr>
+                                    <td colspan="3"><span class="text-muted">No Tours ..</span></td>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>
